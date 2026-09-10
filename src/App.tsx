@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'r
 import { kioskConfig, keyboardMap } from './config'
 import { careers, getTopSkillKeys, skillDefinitions } from './data/careers'
 import { RadarChart } from './components/RadarChart'
-import type { Career, SkillKey } from './types'
+import type { Career, SkillDefinition, SkillKey } from './types'
 
 const getCareerIndexFromKeyboardEvent = (event: KeyboardEvent) => {
   const byKey = keyboardMap[event.key]
@@ -84,19 +84,18 @@ function App() {
     if (topSkills.length <= 1) return
 
     let index = 0
-    const firstStep = window.setTimeout(() => {
-      index = 1
-      setActiveSkill(topSkills[index] ?? topSkills[0])
-    }, kioskConfig.careerRevealMs + kioskConfig.skillStepMs)
+    let intervalId: number | undefined
 
-    const interval = window.setInterval(() => {
-      index = (index + 1) % topSkills.length
-      setActiveSkill(topSkills[index] ?? topSkills[0])
-    }, kioskConfig.skillStepMs)
+    const startCycling = window.setTimeout(() => {
+      intervalId = window.setInterval(() => {
+        index = (index + 1) % topSkills.length
+        setActiveSkill(topSkills[index] ?? topSkills[0])
+      }, kioskConfig.skillStepMs)
+    }, kioskConfig.careerRevealMs)
 
     return () => {
-      window.clearTimeout(firstStep)
-      window.clearInterval(interval)
+      window.clearTimeout(startCycling)
+      if (intervalId !== undefined) window.clearInterval(intervalId)
     }
   }, [selectedCareer, animationKey])
 
@@ -104,7 +103,7 @@ function App() {
     '--accent': selectedCareer?.accent ?? '#63dcff',
   } as CSSProperties
 
-  const activeSkillDefinition = activeSkill ? skillDefinitionByKey.get(activeSkill) : null
+  const activeSkillDefinition = activeSkill ? skillDefinitionByKey.get(activeSkill) : undefined
   const activeSkillData = selectedCareer && activeSkill ? selectedCareer.skills[activeSkill] : null
 
   return (
@@ -216,7 +215,7 @@ function IdleScreen({ onSelect }: IdleScreenProps) {
 type CareerScreenProps = {
   career: Career
   activeSkill: SkillKey | null
-  activeSkillDefinition: ReturnType<typeof skillDefinitionByKey.get>
+  activeSkillDefinition: SkillDefinition | undefined
   activeSkillData: Career['skills'][SkillKey] | null
   animationKey: number
   onSelect: (career: Career) => void
