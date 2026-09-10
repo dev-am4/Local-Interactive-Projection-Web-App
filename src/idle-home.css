@@ -1,0 +1,185 @@
+.idle-stage-cinematic {
+  position: relative;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.idle-stage-cinematic::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 74%;
+  height: 72%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 8%, transparent), transparent 68%);
+  filter: blur(2vmin);
+  z-index: -1;
+  animation: idleHalo 5.6s ease-in-out infinite;
+}
+
+.idle-constellation-center {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 48%;
+  max-width: none;
+  opacity: .24;
+  transform: translate(-50%, -50%) scale(1.08);
+  pointer-events: none;
+  z-index: -1;
+  mask-image: radial-gradient(circle, #000 0 44%, rgba(0,0,0,.7) 62%, transparent 78%);
+}
+
+.idle-question-wrap {
+  width: min(88%, 78vmin);
+  margin-top: -1.8vmin;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.idle-kicker {
+  margin: 0 0 1.7vmin;
+  color: color-mix(in srgb, var(--accent) 72%, white);
+  font-family: "Helvetica Neue", "Arial Narrow", "Leelawadee UI", "Noto Sans Thai", sans-serif;
+  font-size: clamp(10px, 1.25vmin, 17px);
+  font-weight: 700;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  opacity: .8;
+}
+
+.idle-question-frame {
+  min-height: 15vmin;
+  display: grid;
+  place-items: center;
+  animation: idleQuestionIn 1s cubic-bezier(.2,.75,.2,1) both;
+}
+
+.idle-question {
+  margin: 0;
+  max-width: 12.5em;
+  color: #fff;
+  font-family: "Helvetica Neue", "Arial Narrow", "Leelawadee UI", "Noto Sans Thai", sans-serif;
+  font-size: clamp(36px, 6.15vmin, 82px);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+  text-shadow: 0 .04em .45em rgba(0,0,0,.82), 0 0 1.2em color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.idle-question-progress {
+  margin-top: 2.15vmin;
+  display: flex;
+  gap: .72vmin;
+  align-items: center;
+  justify-content: center;
+}
+
+.idle-question-progress span {
+  width: .72vmin;
+  min-width: 5px;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: rgba(255,255,255,.2);
+  transition: width .45s ease, background .45s ease, box-shadow .45s ease;
+}
+
+.idle-question-progress span.active {
+  width: 2.3vmin;
+  aspect-ratio: auto;
+  height: .72vmin;
+  background: var(--accent);
+  box-shadow: 0 0 1.1vmin color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.idle-continue {
+  position: absolute;
+  left: 50%;
+  bottom: .45vmin;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .45vmin;
+  white-space: nowrap;
+  color: rgba(240,247,252,.66);
+  pointer-events: none;
+}
+
+.idle-continue-line {
+  width: 3.8vmin;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 65%, white), transparent);
+  animation: continueLine 2.4s ease-in-out infinite;
+}
+
+.idle-continue-text {
+  font-family: "Helvetica Neue", "Arial Narrow", "Leelawadee UI", "Noto Sans Thai", sans-serif;
+  font-size: clamp(8px, 1.02vmin, 14px);
+  font-weight: 600;
+  letter-spacing: .035em;
+  text-shadow: 0 0 1vmin rgba(0,0,0,.9);
+  animation: continueText 2.4s ease-in-out infinite;
+}
+
+.idle-continue-chevron {
+  color: var(--accent);
+  font-size: clamp(12px, 1.65vmin, 22px);
+  line-height: .8;
+  opacity: .68;
+  animation: continueChevron 1.7s ease-in-out infinite;
+}
+
+@keyframes idleQuestionIn {
+  0% {
+    opacity: 0;
+    transform: translateY(1.3vmin) scale(.985);
+    filter: blur(5px);
+  }
+  42% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes idleHalo {
+  0%, 100% { opacity: .58; transform: translate(-50%, -50%) scale(.96); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.04); }
+}
+
+@keyframes continueLine {
+  0%, 100% { opacity: .25; transform: scaleX(.72); }
+  50% { opacity: .9; transform: scaleX(1); }
+}
+
+@keyframes continueText {
+  0%, 100% { opacity: .46; }
+  50% { opacity: .84; }
+}
+
+@keyframes continueChevron {
+  0%, 100% { opacity: .38; transform: translateY(-.15vmin); }
+  50% { opacity: .92; transform: translateY(.35vmin); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .idle-question-frame,
+  .idle-stage-cinematic::before,
+  .idle-continue-line,
+  .idle-continue-text,
+  .idle-continue-chevron {
+    animation: none !important;
+  }
+}
