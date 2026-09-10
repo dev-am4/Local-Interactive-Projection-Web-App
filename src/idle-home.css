@@ -12,8 +12,8 @@
   position: absolute;
   left: 50%;
   top: 48%;
-  width: 74%;
-  height: 72%;
+  width: 70%;
+  height: 68%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
   background: radial-gradient(circle, color-mix(in srgb, var(--accent) 8%, transparent), transparent 68%);
@@ -26,131 +26,242 @@
   position: absolute;
   left: 50%;
   top: 48%;
-  width: 48%;
+  width: 44%;
   max-width: none;
-  opacity: .24;
-  transform: translate(-50%, -50%) scale(1.08);
+  opacity: .2;
+  transform: translate(-50%, -50%) scale(1.04);
   pointer-events: none;
   z-index: -1;
   mask-image: radial-gradient(circle, #000 0 44%, rgba(0,0,0,.7) 62%, transparent 78%);
 }
 
 .idle-question-wrap {
-  width: min(88%, 78vmin);
-  margin-top: -1.8vmin;
+  width: min(84%, 72vmin);
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
+  transform: translateY(-1.2vmin);
 }
 
 .idle-kicker {
-  margin: 0 0 1.7vmin;
+  margin: 0 0 1.4vmin;
   color: color-mix(in srgb, var(--accent) 72%, white);
-  font-family: "Helvetica Neue", "Arial Narrow", "Leelawadee UI", "Noto Sans Thai", sans-serif;
-  font-size: clamp(10px, 1.25vmin, 17px);
+  font-family: "Arial Narrow", "Helvetica Neue", "Leelawadee UI", "Tahoma", sans-serif;
+  font-size: clamp(9px, 1.05vmin, 14px);
   font-weight: 700;
-  letter-spacing: .11em;
-  text-transform: uppercase;
-  opacity: .8;
+  letter-spacing: .08em;
+  opacity: .78;
 }
 
 .idle-question-frame {
-  min-height: 15vmin;
+  width: 100%;
+  min-height: 13.2vmin;
   display: grid;
   place-items: center;
-  animation: idleQuestionIn 1s cubic-bezier(.2,.75,.2,1) both;
+  animation: idleQuestionCycle 5.2s ease-in-out both;
 }
 
 .idle-question {
-  margin: 0;
-  max-width: 12.5em;
+  margin: 0 auto;
+  max-width: 10.8em;
   color: #fff;
-  font-family: "Helvetica Neue", "Arial Narrow", "Leelawadee UI", "Noto Sans Thai", sans-serif;
-  font-size: clamp(36px, 6.15vmin, 82px);
+  white-space: pre-line;
+  font-family: "Arial Narrow", "Helvetica Neue", "Leelawadee UI", "Tahoma", sans-serif;
+  font-size: clamp(30px, 5.05vmin, 68px);
   font-weight: 800;
   line-height: 1.04;
-  letter-spacing: -.045em;
+  letter-spacing: -.05em;
+  text-align: center;
   text-wrap: balance;
-  text-shadow: 0 .04em .45em rgba(0,0,0,.82), 0 0 1.2em color-mix(in srgb, var(--accent) 12%, transparent);
+  text-shadow: 0 .04em .45em rgba(0,0,0,.82), 0 0 1.2em color-mix(in srgb, var(--accent) 11%, transparent);
 }
 
 .idle-question-progress {
-  margin-top: 2.15vmin;
+  margin-top: 1.45vmin;
   display: flex;
-  gap: .72vmin;
+  gap: .62vmin;
   align-items: center;
   justify-content: center;
 }
 
 .idle-question-progress span {
-  width: .72vmin;
+  width: .62vmin;
   min-width: 5px;
   aspect-ratio: 1;
   border-radius: 999px;
-  background: rgba(255,255,255,.2);
+  background: rgba(255,255,255,.18);
   transition: width .45s ease, background .45s ease, box-shadow .45s ease;
 }
 
 .idle-question-progress span.active {
-  width: 2.3vmin;
+  width: 2vmin;
   aspect-ratio: auto;
-  height: .72vmin;
+  height: .62vmin;
   background: var(--accent);
-  box-shadow: 0 0 1.1vmin color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 0 1vmin color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .idle-continue {
   position: absolute;
   left: 50%;
-  bottom: .45vmin;
+  bottom: .25vmin;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .45vmin;
+  gap: .35vmin;
   white-space: nowrap;
-  color: rgba(240,247,252,.66);
+  color: rgba(240,247,252,.6);
   pointer-events: none;
 }
 
 .idle-continue-line {
-  width: 3.8vmin;
+  width: 3.6vmin;
   height: 1px;
   background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 65%, white), transparent);
   animation: continueLine 2.4s ease-in-out infinite;
 }
 
 .idle-continue-text {
-  font-family: "Helvetica Neue", "Arial Narrow", "Leelawadee UI", "Noto Sans Thai", sans-serif;
-  font-size: clamp(8px, 1.02vmin, 14px);
+  font-family: "Arial Narrow", "Helvetica Neue", "Leelawadee UI", "Tahoma", sans-serif;
+  font-size: clamp(8px, .92vmin, 13px);
   font-weight: 600;
-  letter-spacing: .035em;
+  letter-spacing: .02em;
   text-shadow: 0 0 1vmin rgba(0,0,0,.9);
   animation: continueText 2.4s ease-in-out infinite;
 }
 
 .idle-continue-chevron {
   color: var(--accent);
-  font-size: clamp(12px, 1.65vmin, 22px);
+  font-size: clamp(11px, 1.45vmin, 19px);
   line-height: .8;
-  opacity: .68;
+  opacity: .62;
   animation: continueChevron 1.7s ease-in-out infinite;
 }
 
-@keyframes idleQuestionIn {
+/* Career detail: keep every element inside the safe content area. */
+.career-stage-all-skills {
+  grid-template-columns: 25% 33% 42%;
+  gap: 1.15%;
+}
+
+.career-stage-all-skills .character-portrait.hero {
+  width: 84%;
+  height: 80%;
+}
+
+.content-zone-all-skills {
+  justify-content: flex-start;
+  padding: 1% 1% 1% 4%;
+  overflow: hidden;
+}
+
+.content-zone-all-skills .eyebrow {
+  margin-bottom: .28em;
+}
+
+.content-zone-all-skills h2 {
+  font-family: "Arial Narrow", "Helvetica Neue", "Leelawadee UI", "Tahoma", sans-serif;
+  font-size: clamp(18px, 2.55vmin, 35px);
+  line-height: 1.06;
+  letter-spacing: -.035em;
+}
+
+.content-zone-all-skills .career-description {
+  margin-top: .48em;
+  font-size: clamp(7px, .82vmin, 11px);
+  line-height: 1.38;
+}
+
+.all-skill-list {
+  margin-top: .85vmin;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .52vmin;
+  min-height: 0;
+}
+
+.all-skill-item {
+  min-width: 0;
+  padding: .64vmin .72vmin;
+  border-radius: .72vmin;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, rgba(8,12,18,.68)), rgba(3,6,10,.46));
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, rgba(255,255,255,.04));
+  animation: allSkillIn .52s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.all-skill-item:nth-child(2) { animation-delay: .04s; }
+.all-skill-item:nth-child(3) { animation-delay: .08s; }
+.all-skill-item:nth-child(4) { animation-delay: .12s; }
+.all-skill-item:nth-child(5) { animation-delay: .16s; }
+.all-skill-item:nth-child(6) { animation-delay: .2s; }
+
+.all-skill-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .55vmin;
+}
+
+.all-skill-name {
+  min-width: 0;
+  color: rgba(255,255,255,.94);
+  font-size: clamp(7px, .82vmin, 11px);
+  font-weight: 800;
+  line-height: 1.16;
+}
+
+.level-dots.compact {
+  flex: 0 0 auto;
+  gap: .2vmin;
+  margin: 0;
+}
+
+.level-dots.compact > span {
+  width: .48vmin;
+  min-width: 4px;
+}
+
+.all-skill-item p {
+  margin: .38vmin 0 0;
+  color: rgba(226,238,246,.64);
+  font-size: clamp(6px, .63vmin, 8.5px);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.content-zone-all-skills blockquote {
+  margin-top: .7vmin;
+  font-size: clamp(7px, .82vmin, 11px);
+  line-height: 1.32;
+}
+
+@keyframes idleQuestionCycle {
   0% {
     opacity: 0;
-    transform: translateY(1.3vmin) scale(.985);
-    filter: blur(5px);
+    transform: translateY(1vmin);
+    filter: blur(4px);
   }
-  42% {
+  12% {
     opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+  78% {
+    opacity: 1;
+    transform: translateY(0);
     filter: blur(0);
   }
   100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+    opacity: 0;
+    transform: translateY(-.75vmin);
+    filter: blur(4px);
   }
 }
 
@@ -165,13 +276,37 @@
 }
 
 @keyframes continueText {
-  0%, 100% { opacity: .46; }
-  50% { opacity: .84; }
+  0%, 100% { opacity: .42; }
+  50% { opacity: .78; }
 }
 
 @keyframes continueChevron {
-  0%, 100% { opacity: .38; transform: translateY(-.15vmin); }
-  50% { opacity: .92; transform: translateY(.35vmin); }
+  0%, 100% { opacity: .34; transform: translateY(-.12vmin); }
+  50% { opacity: .88; transform: translateY(.28vmin); }
+}
+
+@keyframes allSkillIn {
+  from { opacity: 0; transform: translateY(.55vmin); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .idle-question-wrap {
+    width: 86%;
+  }
+
+  .idle-question {
+    font-size: clamp(28px, 4.65vmin, 58px);
+  }
+
+  .career-stage-all-skills {
+    grid-template-columns: 24% 32% 44%;
+    gap: .85%;
+  }
+
+  .all-skill-item {
+    padding: .55vmin .6vmin;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -179,7 +314,8 @@
   .idle-stage-cinematic::before,
   .idle-continue-line,
   .idle-continue-text,
-  .idle-continue-chevron {
+  .idle-continue-chevron,
+  .all-skill-item {
     animation: none !important;
   }
 }
