@@ -5,6 +5,7 @@ import './styles.css'
 import './idle-home.css'
 import './idle-center-fix.css'
 import './career-alignment.css'
+import './career-layout-v3.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
