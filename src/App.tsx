@@ -55,13 +55,10 @@ function App() {
       if (event.key.toLowerCase() === 'f') {
         event.preventDefault()
         try {
-          if (!document.fullscreenElement) {
-            await document.documentElement.requestFullscreen()
-          } else {
-            await document.exitFullscreen()
-          }
+          if (!document.fullscreenElement) await document.documentElement.requestFullscreen()
+          else await document.exitFullscreen()
         } catch {
-          // Fullscreen may be blocked by browser policy. Kiosk mode still works without this shortcut.
+          // Browser kiosk/fullscreen policy may block the shortcut.
         }
       }
     }
@@ -72,20 +69,17 @@ function App() {
 
   useEffect(() => {
     if (!selectedCareer) return
-
     const timeout = window.setTimeout(resetToIdle, kioskConfig.idleResetMs)
     return () => window.clearTimeout(timeout)
   }, [selectedCareer, animationKey, resetToIdle])
 
   useEffect(() => {
     if (!selectedCareer) return
-
     const topSkills = getTopSkillKeys(selectedCareer, 3)
     if (topSkills.length <= 1) return
 
     let index = 0
     let intervalId: number | undefined
-
     const startCycling = window.setTimeout(() => {
       intervalId = window.setInterval(() => {
         index = (index + 1) % topSkills.length
@@ -131,82 +125,64 @@ function App() {
         />
       )}
 
-      <section className="ambience ambience-top" aria-hidden="true">
-        <div className="zone-label">ZONE 6 / FUTURE CAREERS</div>
-        <div className="ambience-copy">
-          {selectedCareer ? selectedCareer.ambienceLabel : 'CAREER RADAR / SKILLS MAPPING'}
-        </div>
-      </section>
+      <div className="ambience ambience-top" aria-hidden="true">
+        <div className="ambient-orbit-line" />
+        <div className="ambient-spark spark-a" />
+        <div className="ambient-spark spark-b" />
+      </div>
 
       <section className="safe-area">
-        {!selectedCareer ? (
-          <IdleScreen onSelect={selectCareer} />
-        ) : (
-          <CareerScreen
-            career={selectedCareer}
-            activeSkill={activeSkill}
-            activeSkillDefinition={activeSkillDefinition}
-            activeSkillData={activeSkillData}
-            animationKey={animationKey}
-            onSelect={selectCareer}
-          />
-        )}
+        <div className="safe-content">
+          {!selectedCareer ? (
+            <IdleScreen />
+          ) : (
+            <CareerScreen
+              key={`${selectedCareer.id}-${animationKey}`}
+              career={selectedCareer}
+              activeSkill={activeSkill}
+              activeSkillDefinition={activeSkillDefinition}
+              activeSkillData={activeSkillData}
+              animationKey={animationKey}
+            />
+          )}
+        </div>
+
+        <CareerSelector
+          selectedCareer={selectedCareer}
+          onSelect={selectCareer}
+        />
       </section>
 
-      <section className="ambience ambience-bottom" aria-hidden="true">
-        <div className="bottom-grid" />
-        <div className="bottom-copy">EXPLORE · LEARN · BUILD YOUR FUTURE</div>
-      </section>
+      <div className="ambience ambience-bottom" aria-hidden="true">
+        <div className="ambient-horizon" />
+        <div className="ambient-dust" />
+      </div>
 
       {debug && (
         <aside className="debug-panel">
-          <strong>DEBUG / CALIBRATION</strong>
-          <span>Output: 1:1</span>
-          <span>Safe content: 4:3</span>
-          <span>Keys: 1–6 careers · 0/Esc idle · F fullscreen</span>
+          <strong>CALIBRATION</strong>
+          <span>SAFE CONTENT</span>
+          <span>BUTTON ROW LOCKED</span>
         </aside>
       )}
     </main>
   )
 }
 
-type IdleScreenProps = {
-  onSelect: (career: Career) => void
-}
-
-function IdleScreen({ onSelect }: IdleScreenProps) {
+function IdleScreen() {
   return (
-    <div className="idle-screen">
-      <div className="idle-visual" aria-hidden="true">
-        <div className="idle-radar-ring ring-1" />
-        <div className="idle-radar-ring ring-2" />
-        <div className="idle-radar-ring ring-3" />
-        <div className="idle-core">✦</div>
+    <div className="idle-stage">
+      <div className="idle-constellation" aria-hidden="true">
+        <div className="idle-ring ring-1" />
+        <div className="idle-ring ring-2" />
+        <div className="idle-ring ring-3" />
+        <div className="idle-star">✦</div>
       </div>
 
       <div className="idle-copy">
-        <p className="eyebrow">SPACE CAREER EXPLORER</p>
-        <h1>อาชีพไหน<br />พาคุณไปสู่อวกาศ?</h1>
-        <p className="idle-subtitle">กดปุ่มอาชีพบนผนัง เพื่อสำรวจทักษะสำคัญของแต่ละเส้นทาง</p>
-      </div>
-
-      <div className="career-button-grid" aria-label="ปุ่มเลือกอาชีพสำหรับทดสอบบนหน้าจอ">
-        {careers.map((career) => (
-          <button
-            key={career.id}
-            type="button"
-            className="career-button"
-            style={{ '--button-accent': career.accent } as CSSProperties}
-            onClick={() => onSelect(career)}
-          >
-            <span className="keycap">{career.buttonKey}</span>
-            <span className="career-button-icon">{career.icon}</span>
-            <span className="career-button-text">
-              <strong>{career.nameTh}</strong>
-              <small>{career.nameEn}</small>
-            </span>
-          </button>
-        ))}
+        <p className="eyebrow">เส้นทางอาชีพแห่งอนาคต</p>
+        <h1>คุณอยากมีบทบาทแบบไหน<br />ในโลกของอวกาศ?</h1>
+        <p>เลือกตัวละครอาชีพด้านล่าง แล้วค้นหาทักษะสำคัญของเส้นทางนั้น</p>
       </div>
     </div>
   )
@@ -218,7 +194,6 @@ type CareerScreenProps = {
   activeSkillDefinition: SkillDefinition | undefined
   activeSkillData: Career['skills'][SkillKey] | null
   animationKey: number
-  onSelect: (career: Career) => void
 }
 
 function CareerScreen({
@@ -227,76 +202,129 @@ function CareerScreen({
   activeSkillDefinition,
   activeSkillData,
   animationKey,
-  onSelect,
 }: CareerScreenProps) {
+  const topSkills = getTopSkillKeys(career, 3)
+
   return (
-    <div className="career-screen">
-      <header className="career-header">
-        <div className="career-number">BUTTON {career.buttonKey}</div>
-        <div>
-          <p className="eyebrow">{career.nameEn}</p>
-          <h2>{career.nameTh}</h2>
-          <p className="career-description">{career.shortDescription}</p>
+    <div className="career-stage">
+      <section className="character-zone">
+        <div className="character-aura" aria-hidden="true" />
+        <CharacterPortrait career={career} variant="hero" />
+        <div className="character-caption">
+          <span>{career.nameEn}</span>
+          <strong>{career.nameTh}</strong>
         </div>
-      </header>
+      </section>
 
-      <div className="career-content">
-        <div className="radar-column">
-          <RadarChart
-            career={career}
-            activeSkill={activeSkill ?? undefined}
-            animateKey={animationKey}
-          />
+      <section className="radar-zone">
+        <RadarChart
+          career={career}
+          activeSkill={activeSkill ?? undefined}
+          animateKey={animationKey}
+        />
+      </section>
+
+      <section className="content-zone">
+        <p className="eyebrow">รู้จักอาชีพนี้</p>
+        <h2>{career.nameTh}</h2>
+        <p className="career-description">{career.shortDescription}</p>
+
+        <div className="top-skill-list">
+          {topSkills.map((skillKey) => {
+            const definition = skillDefinitionByKey.get(skillKey)
+            const isActive = skillKey === activeSkill
+            return (
+              <div key={skillKey} className={isActive ? 'top-skill active' : 'top-skill'}>
+                <span className="skill-dot" />
+                <span>{definition?.labelTh}</span>
+              </div>
+            )
+          })}
         </div>
 
-        <aside className="skill-panel">
-          <div className="skill-panel-kicker">SKILL HIGHLIGHT</div>
-          <div className="skill-panel-icon">{career.icon}</div>
-          <h3>{activeSkillDefinition?.labelTh ?? 'ทักษะสำคัญ'}</h3>
-          <p className="skill-panel-en">{activeSkillDefinition?.labelEn ?? 'CAREER SKILL'}</p>
-
+        <div className="skill-story" key={activeSkill ?? 'none'}>
+          <span className="skill-story-label">{activeSkillDefinition?.labelTh ?? 'ทักษะสำคัญ'}</span>
           <div className="level-dots" aria-label={`ระดับความสำคัญ ${activeSkillData?.level ?? 0} จาก 5`}>
             {[1, 2, 3, 4, 5].map((value) => (
               <span key={value} className={value <= (activeSkillData?.level ?? 0) ? 'filled' : ''} />
             ))}
           </div>
-
-          <div className="importance-label">
-            {getImportanceLabel(activeSkillData?.level ?? 0)}
-          </div>
-
-          <p className="skill-summary">{activeSkillData?.summary}</p>
-          <div className="growth-message">ทักษะนี้สามารถฝึกและพัฒนาได้</div>
-        </aside>
-      </div>
-
-      <footer className="career-footer">
-        <div className="career-closing">“{career.closingMessage}”</div>
-        <div className="career-switcher" aria-label="เลือกอาชีพอื่น">
-          {careers.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              aria-label={`เลือก ${item.nameTh}`}
-              className={item.id === career.id ? 'career-switch active' : 'career-switch'}
-              style={{ '--button-accent': item.accent } as CSSProperties}
-              onClick={() => onSelect(item)}
-            >
-              <span>{item.buttonKey}</span>
-            </button>
-          ))}
+          <p>{activeSkillData?.summary}</p>
         </div>
-      </footer>
+
+        <blockquote>{career.closingMessage}</blockquote>
+      </section>
     </div>
   )
 }
 
-function getImportanceLabel(level: number) {
-  if (level >= 5) return 'สำคัญมาก'
-  if (level === 4) return 'สำคัญ'
-  if (level === 3) return 'มีบทบาทสำคัญ'
-  if (level === 2) return 'มีส่วนเกี่ยวข้อง'
-  return 'ทักษะเสริม'
+type CareerSelectorProps = {
+  selectedCareer: Career | null
+  onSelect: (career: Career) => void
+}
+
+function CareerSelector({ selectedCareer, onSelect }: CareerSelectorProps) {
+  return (
+    <nav className="career-selector" aria-label="เลือกอาชีพ">
+      {careers.map((career, index) => {
+        const active = selectedCareer?.id === career.id
+        return (
+          <button
+            key={career.id}
+            type="button"
+            className={active ? 'career-choice active' : 'career-choice'}
+            style={{
+              '--choice-accent': career.accent,
+              '--choice-index': index,
+            } as CSSProperties}
+            onClick={() => onSelect(career)}
+            aria-pressed={active}
+            aria-label={`เลือก ${career.nameTh}`}
+          >
+            <div className="choice-character">
+              <CharacterPortrait career={career} variant="button" />
+            </div>
+            <div className="choice-name">{career.nameTh}</div>
+            <div className="physical-button-marker" aria-hidden="true">
+              <span className="physical-button-core" />
+              <span className="physical-button-ripple" />
+            </div>
+          </button>
+        )
+      })}
+    </nav>
+  )
+}
+
+type CharacterPortraitProps = {
+  career: Career
+  variant: 'hero' | 'button'
+}
+
+function CharacterPortrait({ career, variant }: CharacterPortraitProps) {
+  const [showImage, setShowImage] = useState(true)
+  const imagePath = `/characters/${career.id}.webp`
+
+  useEffect(() => setShowImage(true), [career.id])
+
+  return (
+    <div className={`character-portrait ${variant}`} style={{ '--portrait-accent': career.accent } as CSSProperties}>
+      {showImage ? (
+        <img
+          src={imagePath}
+          alt=""
+          draggable={false}
+          onError={() => setShowImage(false)}
+        />
+      ) : (
+        <div className="character-placeholder" aria-hidden="true">
+          <div className="placeholder-head" />
+          <div className="placeholder-body" />
+          <div className="placeholder-prop">{career.icon}</div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default App
