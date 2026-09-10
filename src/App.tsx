@@ -194,48 +194,50 @@ type CareerScreenProps = {
 function CareerScreen({ career, animationKey }: CareerScreenProps) {
   return (
     <div className="career-stage career-stage-all-skills">
-      <section className="character-zone">
-        <div className="character-aura" aria-hidden="true" />
-        <CharacterPortrait career={career} variant="hero" />
-        <div className="character-caption">
-          <span>{career.nameEn}</span>
-          <strong>{career.nameTh}</strong>
-        </div>
-      </section>
+      <header className="career-title-zone">
+        <p className="career-title-en">{career.nameEn}</p>
+        <h1>{career.nameTh}</h1>
+      </header>
 
-      <section className="radar-zone">
-        <RadarChart
-          career={career}
-          animateKey={animationKey}
-        />
-      </section>
+      <div className="career-main-row">
+        <section className="character-zone">
+          <div className="character-aura" aria-hidden="true" />
+          <CharacterPortrait career={career} variant="hero" />
+        </section>
 
-      <section className="content-zone content-zone-all-skills">
-        <p className="eyebrow">รู้จักอาชีพนี้</p>
-        <h2>{career.nameTh}</h2>
-        <p className="career-description">{career.shortDescription}</p>
+        <section className="radar-zone">
+          <RadarChart
+            career={career}
+            animateKey={animationKey}
+          />
+        </section>
 
-        <div className="all-skill-list" aria-label="ทักษะทั้งหมดของอาชีพนี้">
-          {skillDefinitions.map((definition) => {
-            const data = career.skills[definition.key]
-            return (
-              <div key={definition.key} className="all-skill-item">
-                <div className="all-skill-head">
-                  <span className="all-skill-name">{definition.labelTh}</span>
-                  <div className="level-dots compact" aria-label={`ระดับความสำคัญ ${data.level} จาก 5`}>
-                    {[1, 2, 3, 4, 5].map((value) => (
-                      <span key={value} className={value <= data.level ? 'filled' : ''} />
-                    ))}
+        <section className="content-zone content-zone-all-skills">
+          <p className="eyebrow">เกี่ยวกับอาชีพนี้</p>
+          <p className="career-description">{career.shortDescription}</p>
+
+          <div className="all-skill-list" aria-label="ทักษะทั้งหมดของอาชีพนี้">
+            {skillDefinitions.map((definition) => {
+              const data = career.skills[definition.key]
+              return (
+                <div key={definition.key} className="all-skill-item">
+                  <div className="all-skill-head">
+                    <span className="all-skill-name">{definition.labelTh}</span>
+                    <div className="level-dots compact" aria-label={`ระดับความสำคัญ ${data.level} จาก 5`}>
+                      {[1, 2, 3, 4, 5].map((value) => (
+                        <span key={value} className={value <= data.level ? 'filled' : ''} />
+                      ))}
+                    </div>
                   </div>
+                  <p>{data.summary}</p>
                 </div>
-                <p>{data.summary}</p>
-              </div>
-            )
-          })}
-        </div>
+              )
+            })}
+          </div>
 
-        <blockquote>{career.closingMessage}</blockquote>
-      </section>
+          <blockquote>{career.closingMessage}</blockquote>
+        </section>
+      </div>
     </div>
   )
 }
