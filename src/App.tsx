@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react'
 import { kioskConfig, keyboardMap } from './config'
-import { careers, getTopSkillKeys, skillDefinitions } from './data/careers'
+import { careers, skillDefinitions } from './data/careers'
 import { RadarChart } from './components/RadarChart'
-import type { Career, SkillDefinition, SkillKey } from './types'
+import type { Career } from './types'
 
 const IDLE_QUESTIONS = [
-  'ถ้าได้ทำงานกับอวกาศ คุณอยากเป็นใคร?',
-  'ถ้าได้ขึ้นยาน คุณอยากมีหน้าที่อะไร?',
-  'คุณถนัดค้นหา สร้าง หรือออกแบบ?',
-  'ทักษะของคุณ เหมาะกับอาชีพไหน?',
-  'อนาคตในโลกอวกาศของคุณ เป็นแบบไหน?',
+  'ถ้าได้ทำงานกับอวกาศ\nคุณอยากเป็นใคร?',
+  'ถ้าได้ขึ้นยานอวกาศ\nคุณอยากทำหน้าที่อะไร?',
+  'คุณถนัดค้นหา\nสร้าง หรือออกแบบ?',
+  'ทักษะของคุณ\nพาไปสู่อาชีพไหน?',
+  'อนาคตในโลกอวกาศ\nของคุณเป็นแบบไหน?',
 ] as const
 
 const getCareerIndexFromKeyboardEvent = (event: KeyboardEvent) => {
@@ -19,26 +19,20 @@ const getCareerIndexFromKeyboardEvent = (event: KeyboardEvent) => {
   return typeof byCode === 'number' ? byCode : null
 }
 
-const skillDefinitionByKey = new Map(skillDefinitions.map((skill) => [skill.key, skill]))
-
 function App() {
   const debug = useMemo(() => new URLSearchParams(window.location.search).get('debug') === '1', [])
   const [selectedCareer, setSelectedCareer] = useState<Career | null>(null)
-  const [activeSkill, setActiveSkill] = useState<SkillKey | null>(null)
   const [animationKey, setAnimationKey] = useState(0)
   const [mediaFailed, setMediaFailed] = useState(false)
 
   const resetToIdle = useCallback(() => {
     setSelectedCareer(null)
-    setActiveSkill(null)
     setMediaFailed(false)
     setAnimationKey((value) => value + 1)
   }, [])
 
   const selectCareer = useCallback((career: Career) => {
-    const topSkills = getTopSkillKeys(career, 3)
     setSelectedCareer(career)
-    setActiveSkill(topSkills[0] ?? null)
     setMediaFailed(false)
     setAnimationKey((value) => value + 1)
   }, [])
@@ -81,32 +75,9 @@ function App() {
     return () => window.clearTimeout(timeout)
   }, [selectedCareer, animationKey, resetToIdle])
 
-  useEffect(() => {
-    if (!selectedCareer) return
-    const topSkills = getTopSkillKeys(selectedCareer, 3)
-    if (topSkills.length <= 1) return
-
-    let index = 0
-    let intervalId: number | undefined
-    const startCycling = window.setTimeout(() => {
-      intervalId = window.setInterval(() => {
-        index = (index + 1) % topSkills.length
-        setActiveSkill(topSkills[index] ?? topSkills[0])
-      }, kioskConfig.skillStepMs)
-    }, kioskConfig.careerRevealMs)
-
-    return () => {
-      window.clearTimeout(startCycling)
-      if (intervalId !== undefined) window.clearInterval(intervalId)
-    }
-  }, [selectedCareer, animationKey])
-
   const pageStyle = {
     '--accent': selectedCareer?.accent ?? '#63dcff',
   } as CSSProperties
-
-  const activeSkillDefinition = activeSkill ? skillDefinitionByKey.get(activeSkill) : undefined
-  const activeSkillData = selectedCareer && activeSkill ? selectedCareer.skills[activeSkill] : null
 
   return (
     <main className={debug ? 'projection-app debug' : 'projection-app'} style={pageStyle}>
@@ -147,9 +118,6 @@ function App() {
             <CareerScreen
               key={`${selectedCareer.id}-${animationKey}`}
               career={selectedCareer}
-              activeSkill={activeSkill}
-              activeSkillDefinition={activeSkillDefinition}
-              activeSkillData={activeSkillData}
               animationKey={animationKey}
             />
           )}
@@ -211,7 +179,7 @@ function IdleScreen() {
 
       <div className="idle-continue" aria-hidden="true">
         <span className="idle-continue-line" />
-        <span className="idle-continue-text">แตะเลือกอาชีพด้านล่าง เพื่อดูต่อ</span>
+        <span className="idle-continue-text">แตะปุ่มอาชีพด้านล่าง เพื่อดูต่อ</span>
         <span className="idle-continue-chevron">⌄</span>
       </div>
     </div>
@@ -220,23 +188,12 @@ function IdleScreen() {
 
 type CareerScreenProps = {
   career: Career
-  activeSkill: SkillKey | null
-  activeSkillDefinition: SkillDefinition | undefined
-  activeSkillData: Career['skills'][SkillKey] | null
   animationKey: number
 }
 
-function CareerScreen({
-  career,
-  activeSkill,
-  activeSkillDefinition,
-  activeSkillData,
-  animationKey,
-}: CareerScreenProps) {
-  const topSkills = getTopSkillKeys(career, 3)
-
+function CareerScreen({ career, animationKey }: CareerScreenProps) {
   return (
-    <div className="career-stage">
+    <div className="career-stage career-stage-all-skills">
       <section className="character-zone">
         <div className="character-aura" aria-hidden="true" />
         <CharacterPortrait career={career} variant="hero" />
@@ -249,37 +206,32 @@ function CareerScreen({
       <section className="radar-zone">
         <RadarChart
           career={career}
-          activeSkill={activeSkill ?? undefined}
           animateKey={animationKey}
         />
       </section>
 
-      <section className="content-zone">
+      <section className="content-zone content-zone-all-skills">
         <p className="eyebrow">รู้จักอาชีพนี้</p>
         <h2>{career.nameTh}</h2>
         <p className="career-description">{career.shortDescription}</p>
 
-        <div className="top-skill-list">
-          {topSkills.map((skillKey) => {
-            const definition = skillDefinitionByKey.get(skillKey)
-            const isActive = skillKey === activeSkill
+        <div className="all-skill-list" aria-label="ทักษะทั้งหมดของอาชีพนี้">
+          {skillDefinitions.map((definition) => {
+            const data = career.skills[definition.key]
             return (
-              <div key={skillKey} className={isActive ? 'top-skill active' : 'top-skill'}>
-                <span className="skill-dot" />
-                <span>{definition?.labelTh}</span>
+              <div key={definition.key} className="all-skill-item">
+                <div className="all-skill-head">
+                  <span className="all-skill-name">{definition.labelTh}</span>
+                  <div className="level-dots compact" aria-label={`ระดับความสำคัญ ${data.level} จาก 5`}>
+                    {[1, 2, 3, 4, 5].map((value) => (
+                      <span key={value} className={value <= data.level ? 'filled' : ''} />
+                    ))}
+                  </div>
+                </div>
+                <p>{data.summary}</p>
               </div>
             )
           })}
-        </div>
-
-        <div className="skill-story" key={activeSkill ?? 'none'}>
-          <span className="skill-story-label">{activeSkillDefinition?.labelTh ?? 'ทักษะสำคัญ'}</span>
-          <div className="level-dots" aria-label={`ระดับความสำคัญ ${activeSkillData?.level ?? 0} จาก 5`}>
-            {[1, 2, 3, 4, 5].map((value) => (
-              <span key={value} className={value <= (activeSkillData?.level ?? 0) ? 'filled' : ''} />
-            ))}
-          </div>
-          <p>{activeSkillData?.summary}</p>
         </div>
 
         <blockquote>{career.closingMessage}</blockquote>
