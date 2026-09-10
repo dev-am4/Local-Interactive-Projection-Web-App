@@ -1,57 +1,71 @@
-/* Career detail V3: centered title above a level three-column content row. */
+/* Career detail V3: title centered across the full safe area, then one full-width row. */
 .career-stage.career-stage-all-skills {
+  width: 100%;
   height: 100%;
   display: grid;
-  grid-template-rows: 15% minmax(0, 85%);
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: 17% minmax(0, 83%);
   gap: 0;
   align-items: stretch;
+  justify-items: stretch;
+  overflow: hidden;
 }
 
 .career-title-zone {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
   position: relative;
   z-index: 4;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 0;
-  min-height: 0;
-  padding: 0 6%;
+  padding: 0 5%;
   text-align: center;
   pointer-events: none;
   animation: contentIn .58s cubic-bezier(.2,.85,.2,1) both;
 }
 
 .career-title-zone .career-title-en {
-  margin: 0 0 .15em;
+  margin: 0 0 .18em;
   color: var(--accent);
-  font-size: clamp(7px, .8vmin, 11px);
+  font-size: clamp(8px, .9vmin, 12px);
   line-height: 1;
   font-weight: 800;
-  letter-spacing: .14em;
+  letter-spacing: .15em;
   text-transform: uppercase;
   opacity: .9;
 }
 
 .career-title-zone h1 {
   margin: 0;
-  max-width: 92%;
+  width: 100%;
+  max-width: 90%;
   color: #fff;
-  font-size: clamp(22px, 3.05vmin, 42px);
-  line-height: 1.05;
+  font-size: clamp(24px, 3.45vmin, 46px);
+  line-height: 1.02;
   font-weight: 900;
-  letter-spacing: -.035em;
+  letter-spacing: -.04em;
+  text-align: center;
   text-wrap: balance;
-  text-shadow: 0 0 22px color-mix(in srgb, var(--accent) 18%, transparent);
+  text-shadow: 0 0 24px color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 .career-main-row {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  width: 100%;
+  height: 100%;
   min-width: 0;
   min-height: 0;
   display: grid;
-  grid-template-columns: 28% 38% 34%;
-  gap: 1.6%;
-  align-items: start;
+  grid-template-columns: minmax(0, 30%) minmax(0, 37%) minmax(0, 33%);
+  column-gap: 1.5%;
+  align-items: stretch;
+  justify-items: stretch;
   overflow: hidden;
 }
 
@@ -60,8 +74,9 @@
 .career-main-row > .content-zone {
   min-width: 0;
   min-height: 0;
+  width: 100%;
   height: 100%;
-  align-self: start;
+  align-self: stretch;
 }
 
 .career-main-row .character-zone {
@@ -70,29 +85,33 @@
   align-items: flex-start;
   justify-content: center;
   overflow: hidden;
-  padding-top: 1.2%;
+  padding: 1.2% 1% 0;
 }
 
 .career-main-row .character-portrait.hero {
-  width: 86%;
-  height: 88%;
+  width: 94%;
+  height: 96%;
   transform-origin: 50% 0%;
 }
 
 .career-main-row .character-aura {
-  top: 7%;
+  top: 4%;
   bottom: auto;
+  width: 94%;
 }
 
 .career-main-row .radar-zone {
   display: grid;
   place-items: start center;
-  padding-top: .4%;
+  overflow: visible;
+  padding: 1.2% 1% 0;
 }
 
 .career-main-row .radar-wrap {
-  width: 96%;
-  max-height: 100%;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 96%;
   margin: 0 auto;
 }
 
@@ -100,42 +119,42 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: .4% 1.4% 0 3.2%;
+  padding: 1.2% 1.2% 0 3%;
   overflow: hidden;
 }
 
 .career-main-row .content-zone .eyebrow {
-  margin: 0 0 .42em;
+  margin: 0 0 .48em;
 }
 
 .career-main-row .career-description {
-  margin: 0 0 .7vmin;
-  font-size: clamp(7px, .83vmin, 11px);
-  line-height: 1.38;
+  margin: 0 0 .72vmin;
+  font-size: clamp(8px, .9vmin, 12px);
+  line-height: 1.4;
 }
 
 .career-main-row .all-skill-list {
-  margin-top: .35vmin;
-  gap: .48vmin;
+  margin-top: .3vmin;
+  gap: .5vmin;
 }
 
 .career-main-row .all-skill-item {
-  padding: .52vmin .64vmin;
+  padding: .54vmin .66vmin;
 }
 
 .career-main-row .all-skill-name {
-  font-size: clamp(7px, .82vmin, 11px);
+  font-size: clamp(7px, .84vmin, 11px);
 }
 
 .career-main-row .all-skill-item p {
   margin-top: .24vmin;
-  font-size: clamp(6px, .68vmin, 9px);
+  font-size: clamp(6px, .69vmin, 9px);
   line-height: 1.32;
 }
 
 .career-main-row .content-zone blockquote {
   margin-top: .55vmin;
   padding-top: .5vmin;
-  font-size: clamp(7px, .78vmin, 10px);
+  font-size: clamp(7px, .8vmin, 10px);
   line-height: 1.32;
 }
