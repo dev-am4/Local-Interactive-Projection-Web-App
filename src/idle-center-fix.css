@@ -42,3 +42,7 @@
   text-align: center;
   justify-content: center;
 }
+
+.idle-stage-cinematic .idle-star {
+  display: none !important;
+}
