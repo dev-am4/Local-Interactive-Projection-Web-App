@@ -1,0 +1,11 @@
+:root {
+  font-family: "Netflix Sans", "Helvetica Neue", Arial, Tahoma, "Noto Sans Thai", sans-serif;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
