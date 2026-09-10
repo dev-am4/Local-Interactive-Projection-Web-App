@@ -4,6 +4,14 @@ import { careers, getTopSkillKeys, skillDefinitions } from './data/careers'
 import { RadarChart } from './components/RadarChart'
 import type { Career, SkillDefinition, SkillKey } from './types'
 
+const IDLE_QUESTIONS = [
+  'ถ้าได้ทำงานกับอวกาศ คุณอยากเป็นใคร?',
+  'ถ้าได้ขึ้นยาน คุณอยากมีหน้าที่อะไร?',
+  'คุณถนัดค้นหา สร้าง หรือออกแบบ?',
+  'ทักษะของคุณ เหมาะกับอาชีพไหน?',
+  'อนาคตในโลกอวกาศของคุณ เป็นแบบไหน?',
+] as const
+
 const getCareerIndexFromKeyboardEvent = (event: KeyboardEvent) => {
   const byKey = keyboardMap[event.key]
   if (typeof byKey === 'number') return byKey
@@ -170,19 +178,41 @@ function App() {
 }
 
 function IdleScreen() {
+  const [questionIndex, setQuestionIndex] = useState(0)
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setQuestionIndex((current) => (current + 1) % IDLE_QUESTIONS.length)
+    }, 5200)
+
+    return () => window.clearInterval(interval)
+  }, [])
+
   return (
-    <div className="idle-stage">
-      <div className="idle-constellation" aria-hidden="true">
+    <div className="idle-stage idle-stage-cinematic">
+      <div className="idle-constellation idle-constellation-center" aria-hidden="true">
         <div className="idle-ring ring-1" />
         <div className="idle-ring ring-2" />
         <div className="idle-ring ring-3" />
         <div className="idle-star">✦</div>
       </div>
 
-      <div className="idle-copy">
-        <p className="eyebrow">เส้นทางอาชีพแห่งอนาคต</p>
-        <h1>คุณอยากมีบทบาทแบบไหน<br />ในโลกของอวกาศ?</h1>
-        <p>เลือกตัวละครอาชีพด้านล่าง แล้วค้นหาทักษะสำคัญของเส้นทางนั้น</p>
+      <div className="idle-question-wrap">
+        <p className="idle-kicker">อนาคตของอวกาศ อาจเริ่มจากคุณ</p>
+        <div className="idle-question-frame" key={questionIndex}>
+          <h1 className="idle-question">{IDLE_QUESTIONS[questionIndex]}</h1>
+        </div>
+        <div className="idle-question-progress" aria-hidden="true">
+          {IDLE_QUESTIONS.map((_, index) => (
+            <span key={index} className={index === questionIndex ? 'active' : ''} />
+          ))}
+        </div>
+      </div>
+
+      <div className="idle-continue" aria-hidden="true">
+        <span className="idle-continue-line" />
+        <span className="idle-continue-text">แตะเลือกอาชีพด้านล่าง เพื่อดูต่อ</span>
+        <span className="idle-continue-chevron">⌄</span>
       </div>
     </div>
   )
