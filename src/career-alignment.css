@@ -1,0 +1,78 @@
+/* Keep the three primary career-detail zones on one visual top line.
+   This is intentionally loaded after the legacy layout styles. */
+
+.career-stage.career-stage-all-skills {
+  height: 100%;
+  align-items: start;
+  padding-top: 3.2%;
+}
+
+.career-stage-all-skills .character-zone,
+.career-stage-all-skills .radar-zone,
+.career-stage-all-skills .content-zone {
+  align-self: start;
+  height: 96.8%;
+  min-height: 0;
+}
+
+.career-stage-all-skills .character-zone {
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 0;
+}
+
+.career-stage-all-skills .character-portrait.hero {
+  width: 84%;
+  height: 84%;
+  place-items: start center;
+}
+
+.career-stage-all-skills .character-caption {
+  bottom: 10%;
+}
+
+.career-stage-all-skills .radar-zone {
+  place-items: start center;
+  padding-top: 0;
+}
+
+.career-stage-all-skills .radar-wrap {
+  width: 94%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.career-stage-all-skills .content-zone-all-skills {
+  justify-content: flex-start;
+  padding: 0 1% 1% 4%;
+  overflow: hidden;
+}
+
+/* Keep all six skill cards compact enough to stay inside the shared top-aligned area. */
+.career-stage-all-skills .all-skill-list {
+  margin-top: .72vmin;
+  gap: .46vmin;
+}
+
+.career-stage-all-skills .all-skill-item {
+  padding: .56vmin .66vmin;
+}
+
+.career-stage-all-skills .content-zone-all-skills blockquote {
+  margin-top: .55vmin;
+}
+
+@media (max-width: 900px) {
+  .career-stage.career-stage-all-skills {
+    padding-top: 2.8%;
+  }
+
+  .career-stage-all-skills .character-portrait.hero {
+    width: 82%;
+    height: 82%;
+  }
+
+  .career-stage-all-skills .radar-wrap {
+    width: 92%;
+  }
+}
