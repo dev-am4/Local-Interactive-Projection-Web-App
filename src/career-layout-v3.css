@@ -85,19 +85,62 @@
   align-items: flex-start;
   justify-content: center;
   overflow: hidden;
-  padding: 1.2% 1% 0;
+  padding: .2% 0 0;
+}
+
+.career-main-row .character-zone::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 7%;
+  width: 86%;
+  height: 82%;
+  transform: translateX(-50%);
+  border-radius: 48% 48% 34% 34%;
+  background:
+    radial-gradient(circle at 50% 34%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 54%),
+    linear-gradient(180deg, color-mix(in srgb, var(--accent) 4%, transparent), transparent 72%);
+  filter: blur(.35vmin);
+  opacity: .95;
+  pointer-events: none;
+}
+
+.career-main-row .character-zone::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 1.5%;
+  width: 70%;
+  height: 4.6%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--accent) 38%, transparent), transparent 68%);
+  filter: blur(.75vmin);
+  opacity: .78;
+  pointer-events: none;
 }
 
 .career-main-row .character-portrait.hero {
-  width: 94%;
-  height: 96%;
-  transform-origin: 50% 0%;
+  z-index: 2;
+  width: 98%;
+  height: 100%;
+  transform-origin: 50% 100%;
+}
+
+.career-main-row .character-portrait.hero img {
+  object-fit: contain;
+  object-position: center bottom;
+  filter:
+    drop-shadow(0 0 .45vmin rgba(255,255,255,.20))
+    drop-shadow(0 0 1.3vmin color-mix(in srgb, var(--accent) 24%, transparent))
+    drop-shadow(0 1.2vmin 1.8vmin rgba(0,0,0,.72));
 }
 
 .career-main-row .character-aura {
-  top: 4%;
+  top: 3%;
   bottom: auto;
-  width: 94%;
+  width: 98%;
+  opacity: .65;
 }
 
 .career-main-row .radar-zone {
@@ -157,4 +200,20 @@
   padding-top: .5vmin;
   font-size: clamp(7px, .8vmin, 10px);
   line-height: 1.32;
+}
+
+/* Real character art is reused in the fixed selector. Keep full-body readability while making the active choice feel alive. */
+.choice-character img {
+  object-fit: contain;
+  object-position: center bottom;
+  transform: scale(1.04);
+  transform-origin: 50% 100%;
+  transition: transform .55s cubic-bezier(.2,.8,.2,1), filter .55s ease;
+}
+
+.career-choice.active .choice-character img {
+  transform: scale(1.11) translateY(-1.5%);
+  filter:
+    drop-shadow(0 0 .8vmin color-mix(in srgb, var(--choice-accent) 46%, transparent))
+    drop-shadow(0 .5vmin .8vmin rgba(0,0,0,.5));
 }
