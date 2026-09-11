@@ -127,15 +127,6 @@
   transform-origin: 50% 100%;
 }
 
-.career-main-row .character-portrait.hero img {
-  object-fit: contain;
-  object-position: center bottom;
-  filter:
-    drop-shadow(0 0 .45vmin rgba(255,255,255,.20))
-    drop-shadow(0 0 1.3vmin color-mix(in srgb, var(--accent) 24%, transparent))
-    drop-shadow(0 1.2vmin 1.8vmin rgba(0,0,0,.72));
-}
-
 .career-main-row .character-aura {
   top: 3%;
   bottom: auto;
@@ -202,28 +193,12 @@
   line-height: 1.32;
 }
 
-/* Real character art is reused in the fixed selector. Keep full-body readability while making the active choice feel alive. */
-.choice-character img {
-  object-fit: contain;
-  object-position: center bottom;
-  transform: scale(1.04);
-  transform-origin: 50% 100%;
-  transition: transform .55s cubic-bezier(.2,.8,.2,1), filter .55s ease;
-}
-
-.career-choice.active .choice-character img {
-  transform: scale(1.11) translateY(-1.5%);
-  filter:
-    drop-shadow(0 0 .8vmin color-mix(in srgb, var(--choice-accent) 46%, transparent))
-    drop-shadow(0 .5vmin .8vmin rgba(0,0,0,.5));
-}
-
 /* Six Thai career portraits share one transparent sprite so the kiosk loads fast and stays visually consistent. */
 .character-sprite {
   display: block;
   width: 100%;
   aspect-ratio: 3 / 5;
-  background-image: url('/characters/career-sprite.webp');
+  background-image: url('/characters/career-sprite.webp?v=3');
   background-repeat: no-repeat;
   background-size: 300% 200%;
   background-position: 0 0;
@@ -235,29 +210,12 @@
   transition: transform .5s cubic-bezier(.2,.8,.2,1), filter .5s ease, opacity .35s ease;
 }
 
-.character-portrait[data-career="astronomer"] .character-sprite {
-  background-position: 0% 0%;
-}
-
-.character-portrait[data-career="astronaut"] .character-sprite {
-  background-position: 50% 0%;
-}
-
-.character-portrait[data-career="aerospace-engineer"] .character-sprite {
-  background-position: 100% 0%;
-}
-
-.character-portrait[data-career="space-scientist"] .character-sprite {
-  background-position: 0% 100%;
-}
-
-.character-portrait[data-career="software-ai-developer"] .character-sprite {
-  background-position: 50% 100%;
-}
-
-.character-portrait[data-career="scientific-digital-artist"] .character-sprite {
-  background-position: 100% 100%;
-}
+.character-portrait[data-career="astronomer"] .character-sprite { background-position: 0% 0%; }
+.character-portrait[data-career="astronaut"] .character-sprite { background-position: 50% 0%; }
+.character-portrait[data-career="aerospace-engineer"] .character-sprite { background-position: 100% 0%; }
+.character-portrait[data-career="space-scientist"] .character-sprite { background-position: 0% 100%; }
+.character-portrait[data-career="software-ai-developer"] .character-sprite { background-position: 50% 100%; }
+.character-portrait[data-career="scientific-digital-artist"] .character-sprite { background-position: 100% 100%; }
 
 .career-main-row .character-portrait.hero {
   display: grid;
@@ -270,14 +228,9 @@
   animation: characterFloatIn .72s cubic-bezier(.18,.86,.21,1) both;
 }
 
-.career-main-row .character-portrait.hero[data-career="astronaut"] .character-sprite {
-  width: 100%;
-}
-
+.career-main-row .character-portrait.hero[data-career="astronaut"] .character-sprite { width: 100%; }
 .career-main-row .character-portrait.hero[data-career="scientific-digital-artist"] .character-sprite,
-.career-main-row .character-portrait.hero[data-career="aerospace-engineer"] .character-sprite {
-  width: 94%;
-}
+.career-main-row .character-portrait.hero[data-career="aerospace-engineer"] .character-sprite { width: 94%; }
 
 .character-portrait.button {
   display: grid;
@@ -301,9 +254,7 @@
     drop-shadow(0 .5vmin .8vmin rgba(0,0,0,.5));
 }
 
-.career-choice:not(.active) .choice-character .character-sprite {
-  opacity: .76;
-}
+.career-choice:not(.active) .choice-character .character-sprite { opacity: .76; }
 
 @keyframes characterFloatIn {
   from {
