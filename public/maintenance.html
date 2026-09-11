@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Space Career - Maintenance</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;background:#05070b;color:#eef6ff;font-family:"Segoe UI","Leelawadee UI",sans-serif}body{min-height:100vh;padding:28px}.wrap{max-width:1180px;margin:auto}.top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}.top h1{margin:0;font-size:30px}.muted{color:#8fa4b9}.badge{padding:8px 12px;border:1px solid #294158;border-radius:999px;background:#0b1420}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}.key{border:1px solid #24384c;border-radius:16px;padding:18px;background:#09111a;transition:.15s}.key.active{border-color:#63dcff;box-shadow:0 0 28px rgba(99,220,255,.35);transform:translateY(-2px)}.num{font-size:30px;font-weight:800}.name{margin-top:4px}.status{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}.panel{border:1px solid #24384c;border-radius:16px;padding:18px;background:#09111a}.row{display:flex;justify-content:space-between;gap:20px;padding:8px 0;border-bottom:1px solid #142231}.row:last-child{border-bottom:0}.ok{color:#70efb7}.bad{color:#ff7a7a}.warn{color:#ffd36a}.actions{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap}button,a.btn{appearance:none;border:1px solid #2d526e;background:#0b1d2b;color:white;border-radius:10px;padding:10px 14px;text-decoration:none;cursor:pointer}.hint{margin-top:16px;color:#9db0c4;font-size:14px}@media(max-width:800px){.grid,.status{grid-template-columns:1fr 1fr}}@media(max-width:520px){.grid,.status{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div><div class="muted">OFFLINE KIOSK DIAGNOSTICS</div><h1>Space Career Maintenance</h1></div>
+    <div id="clock" class="badge">--:--:--</div>
+  </div>
+
+  <div class="grid" id="keys"></div>
+
+  <div class="status">
+    <div class="panel">
+      <strong>ระบบ</strong>
+      <div id="system"></div>
+    </div>
+    <div class="panel">
+      <strong>ไฟล์ Media</strong>
+      <div id="assets"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button id="reload">ตรวจใหม่</button>
+    <a class="btn" href="/">กลับหน้า Exhibition</a>
+  </div>
+  <div class="hint">ทดสอบปุ่มจริงโดยกดปุ่มฝังผนัง 1–6 ช่องที่ตรงกันจะสว่างขึ้น • Ctrl+Shift+M จากหน้า Exhibition เพื่อเข้าหน้านี้</div>
+</div>
+<script>
+const careers=[
+ ['1','นักดาราศาสตร์','astronomer'],['2','นักบินอวกาศ','astronaut'],['3','วิศวกรการบินและอวกาศ','aerospace-engineer'],
+ ['4','นักวิทยาศาสตร์และนักวิจัยอวกาศ','space-scientist'],['5','Software & AI','software-ai-developer'],['6','Scientific Digital Artist','scientific-digital-artist']
+];
+const keys=document.getElementById('keys');
+careers.forEach(([key,name,id])=>{const el=document.createElement('div');el.className='key';el.dataset.key=key;el.innerHTML=`<div class="num">${key}</div><div class="name">${name}</div><div class="muted">${id}</div>`;keys.appendChild(el)});
+addEventListener('keydown',e=>{const key=e.key.replace('Numpad','');const el=document.querySelector(`.key[data-key="${key}"]`);if(!el)return;el.classList.add('active');setTimeout(()=>el.classList.remove('active'),450)});
+setInterval(()=>document.getElementById('clock').textContent=new Date().toLocaleString('th-TH'),1000);
+const row=(name,value,cls='')=>`<div class="row"><span>${name}</span><span class="${cls}">${value}</span></div>`;
+async function exists(url){try{const r=await fetch(url+(url.includes('?')?'&':'?')+'t='+Date.now(),{cache:'no-store'});return r.ok}catch{return false}}
+async function run(){
+ const sys=document.getElementById('system'), assets=document.getElementById('assets');
+ sys.innerHTML=row('URL',location.origin)+row('Online state',navigator.onLine?'มี Network':'Offline',navigator.onLine?'warn':'ok')+row('Fullscreen',document.fullscreenElement?'YES':'NO',document.fullscreenElement?'ok':'warn')+row('Viewport',innerWidth+' × '+innerHeight);
+ let config={careers:{}};try{const r=await fetch('/offline-content.json?t='+Date.now(),{cache:'no-store'});config=await r.json();sys.innerHTML+=row('offline-content.json','OK','ok')}catch{sys.innerHTML+=row('offline-content.json','ERROR','bad')}
+ const lines=[];
+ for(const [key,name,id] of careers){const item=config.careers?.[id]||{};const char=item.character||`/characters/${id}.webp`;const charOk=await exists(char);let extra='';let cls=charOk?'ok':'bad';
+   if(item.videoEnabled&&item.backgroundVideo){const ok=await exists(item.backgroundVideo);extra=` • VIDEO ${ok?'OK':'FAIL'}`;if(!ok)cls='bad'}else if(item.backgroundImage){const ok=await exists(item.backgroundImage);extra=` • BG ${ok?'OK':'FAIL'}`;if(!ok)cls='bad'}
+   lines.push(row(key+' '+name,(charOk?'CHAR OK':'CHAR FAIL')+extra,cls));
+ }
+ assets.innerHTML=lines.join('');
+}
+document.getElementById('reload').onclick=run;run();
+</script>
+</body>
+</html>
