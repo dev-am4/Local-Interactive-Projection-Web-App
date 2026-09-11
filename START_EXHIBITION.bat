@@ -2,10 +2,13 @@
 setlocal EnableExtensions
 cd /d "%~dp0"
 
-set "KIOSK_URL=http://127.0.0.1:4173"
-set "KIOSK_PROFILE=%CD%\.kiosk-profile"
+set "KIOSK_PORT=4173"
 set "PROJECTOR_X=0"
 set "PROJECTOR_Y=0"
+if exist KIOSK_SETTINGS.bat call KIOSK_SETTINGS.bat
+
+set "KIOSK_URL=http://127.0.0.1:%KIOSK_PORT%"
+set "KIOSK_PROFILE=%CD%\.kiosk-profile"
 
 if not exist dist\index.html (
   echo [ERROR] Offline build not found.
@@ -24,7 +27,7 @@ if errorlevel 1 (
 powershell -NoProfile -Command "try { $r=Invoke-WebRequest -UseBasicParsing '%KIOSK_URL%/__health' -TimeoutSec 1; if($r.StatusCode -eq 200){exit 0}else{exit 1} } catch { exit 1 }" >nul 2>nul
 if errorlevel 1 (
   echo Starting local exhibition server...
-  start "SpaceCareer Offline Server" /min cmd /c "cd /d \"%CD%\" && node tools\offline-server.mjs dist 4173"
+  start "SpaceCareer Offline Server" /min cmd /c "cd /d \"%CD%\" && node tools\offline-server.mjs dist %KIOSK_PORT%"
 )
 
 echo Waiting for local server...
