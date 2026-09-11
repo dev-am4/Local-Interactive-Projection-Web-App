@@ -1,7 +1,9 @@
 @echo off
 setlocal EnableExtensions
 cd /d "%~dp0"
-set "BASE_URL=http://127.0.0.1:4173"
+set "KIOSK_PORT=4173"
+if exist KIOSK_SETTINGS.bat call KIOSK_SETTINGS.bat
+set "BASE_URL=http://127.0.0.1:%KIOSK_PORT%"
 set "MAINT_URL=%BASE_URL%/maintenance.html"
 
 if not exist dist\maintenance.html (
@@ -12,7 +14,7 @@ if not exist dist\maintenance.html (
 
 powershell -NoProfile -Command "try { $r=Invoke-WebRequest -UseBasicParsing '%BASE_URL%/__health' -TimeoutSec 1; if($r.StatusCode -eq 200){exit 0}else{exit 1} } catch { exit 1 }" >nul 2>nul
 if errorlevel 1 (
-  start "SpaceCareer Offline Server" /min cmd /c "cd /d \"%CD%\" && node tools\offline-server.mjs dist 4173"
+  start "SpaceCareer Offline Server" /min cmd /c "cd /d \"%CD%\" && node tools\offline-server.mjs dist %KIOSK_PORT%"
   timeout /t 2 /nobreak >nul
 )
 
