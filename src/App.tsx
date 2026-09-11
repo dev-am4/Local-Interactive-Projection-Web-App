@@ -286,27 +286,14 @@ type CharacterPortraitProps = {
 }
 
 function CharacterPortrait({ career, variant }: CharacterPortraitProps) {
-  const [showImage, setShowImage] = useState(true)
-  const imagePath = `/characters/${career.id}.webp`
-
-  useEffect(() => setShowImage(true), [career.id])
-
   return (
-    <div className={`character-portrait ${variant}`} style={{ '--portrait-accent': career.accent } as CSSProperties}>
-      {showImage ? (
-        <img
-          src={imagePath}
-          alt=""
-          draggable={false}
-          onError={() => setShowImage(false)}
-        />
-      ) : (
-        <div className="character-placeholder" aria-hidden="true">
-          <div className="placeholder-head" />
-          <div className="placeholder-body" />
-          <div className="placeholder-prop">{career.icon}</div>
-        </div>
-      )}
+    <div
+      className={`character-portrait ${variant}`}
+      data-career={career.id}
+      style={{ '--portrait-accent': career.accent } as CSSProperties}
+      aria-hidden="true"
+    >
+      <span className="character-sprite" />
     </div>
   )
 }
