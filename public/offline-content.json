@@ -1,0 +1,47 @@
+{
+  "version": "1.0.0",
+  "careers": {
+    "astronomer": {
+      "character": "/characters/astronomer.webp",
+      "backgroundImage": "",
+      "backgroundVideo": "",
+      "videoEnabled": false,
+      "backgroundOpacity": 0.22
+    },
+    "astronaut": {
+      "character": "/characters/astronaut.webp",
+      "backgroundImage": "",
+      "backgroundVideo": "",
+      "videoEnabled": false,
+      "backgroundOpacity": 0.22
+    },
+    "aerospace-engineer": {
+      "character": "/characters/aerospace-engineer.webp",
+      "backgroundImage": "",
+      "backgroundVideo": "",
+      "videoEnabled": false,
+      "backgroundOpacity": 0.22
+    },
+    "space-scientist": {
+      "character": "/characters/space-scientist.webp",
+      "backgroundImage": "",
+      "backgroundVideo": "",
+      "videoEnabled": false,
+      "backgroundOpacity": 0.22
+    },
+    "software-ai-developer": {
+      "character": "/characters/software-ai-developer.webp",
+      "backgroundImage": "",
+      "backgroundVideo": "",
+      "videoEnabled": false,
+      "backgroundOpacity": 0.22
+    },
+    "scientific-digital-artist": {
+      "character": "/characters/scientific-digital-artist.webp",
+      "backgroundImage": "",
+      "backgroundVideo": "",
+      "videoEnabled": false,
+      "backgroundOpacity": 0.22
+    }
+  }
+}
