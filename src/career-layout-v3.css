@@ -217,3 +217,102 @@
     drop-shadow(0 0 .8vmin color-mix(in srgb, var(--choice-accent) 46%, transparent))
     drop-shadow(0 .5vmin .8vmin rgba(0,0,0,.5));
 }
+
+/* Six Thai career portraits share one transparent sprite so the kiosk loads fast and stays visually consistent. */
+.character-sprite {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 5;
+  background-image: url('/characters/career-sprite.webp');
+  background-repeat: no-repeat;
+  background-size: 300% 200%;
+  background-position: 0 0;
+  transform-origin: 50% 100%;
+  filter:
+    drop-shadow(0 0 .45vmin rgba(255,255,255,.18))
+    drop-shadow(0 0 1.15vmin color-mix(in srgb, var(--portrait-accent) 26%, transparent))
+    drop-shadow(0 1.1vmin 1.6vmin rgba(0,0,0,.72));
+  transition: transform .5s cubic-bezier(.2,.8,.2,1), filter .5s ease, opacity .35s ease;
+}
+
+.character-portrait[data-career="astronomer"] .character-sprite {
+  background-position: 0% 0%;
+}
+
+.character-portrait[data-career="astronaut"] .character-sprite {
+  background-position: 50% 0%;
+}
+
+.character-portrait[data-career="aerospace-engineer"] .character-sprite {
+  background-position: 100% 0%;
+}
+
+.character-portrait[data-career="space-scientist"] .character-sprite {
+  background-position: 0% 100%;
+}
+
+.character-portrait[data-career="software-ai-developer"] .character-sprite {
+  background-position: 50% 100%;
+}
+
+.character-portrait[data-career="scientific-digital-artist"] .character-sprite {
+  background-position: 100% 100%;
+}
+
+.career-main-row .character-portrait.hero {
+  display: grid;
+  place-items: end center;
+}
+
+.career-main-row .character-portrait.hero .character-sprite {
+  width: 96%;
+  max-width: 100%;
+  animation: characterFloatIn .72s cubic-bezier(.18,.86,.21,1) both;
+}
+
+.career-main-row .character-portrait.hero[data-career="astronaut"] .character-sprite {
+  width: 100%;
+}
+
+.career-main-row .character-portrait.hero[data-career="scientific-digital-artist"] .character-sprite,
+.career-main-row .character-portrait.hero[data-career="aerospace-engineer"] .character-sprite {
+  width: 94%;
+}
+
+.character-portrait.button {
+  display: grid;
+  place-items: end center;
+}
+
+.character-portrait.button .character-sprite {
+  width: 100%;
+  filter:
+    saturate(.88)
+    drop-shadow(0 0 .55vmin color-mix(in srgb, var(--portrait-accent) 28%, transparent))
+    drop-shadow(0 .45vmin .65vmin rgba(0,0,0,.55));
+}
+
+.career-choice.active .choice-character .character-sprite,
+.career-choice:focus-visible .choice-character .character-sprite {
+  transform: translateY(-1.5%) scale(1.09);
+  filter:
+    saturate(1.08)
+    drop-shadow(0 0 .85vmin color-mix(in srgb, var(--choice-accent) 52%, transparent))
+    drop-shadow(0 .5vmin .8vmin rgba(0,0,0,.5));
+}
+
+.career-choice:not(.active) .choice-character .character-sprite {
+  opacity: .76;
+}
+
+@keyframes characterFloatIn {
+  from {
+    opacity: 0;
+    transform: translateY(4.5%) scale(.96);
+    filter: blur(.4vmin) drop-shadow(0 0 0 transparent);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
