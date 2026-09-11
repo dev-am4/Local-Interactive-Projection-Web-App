@@ -193,15 +193,14 @@
   line-height: 1.32;
 }
 
-/* Six Thai career portraits share one transparent sprite so the kiosk loads fast and stays visually consistent. */
+/* Each career uses its own transparent asset. This is intentionally not a sprite: it avoids partial/corrupt binary sprite loads on the kiosk. */
 .character-sprite {
   display: block;
   width: 100%;
   aspect-ratio: 3 / 5;
-  background-image: url('/characters/career-sprite.webp?v=3');
   background-repeat: no-repeat;
-  background-size: 300% 200%;
-  background-position: 0 0;
+  background-size: contain;
+  background-position: center bottom;
   transform-origin: 50% 100%;
   filter:
     drop-shadow(0 0 .45vmin rgba(255,255,255,.18))
@@ -210,12 +209,12 @@
   transition: transform .5s cubic-bezier(.2,.8,.2,1), filter .5s ease, opacity .35s ease;
 }
 
-.character-portrait[data-career="astronomer"] .character-sprite { background-position: 0% 0%; }
-.character-portrait[data-career="astronaut"] .character-sprite { background-position: 50% 0%; }
-.character-portrait[data-career="aerospace-engineer"] .character-sprite { background-position: 100% 0%; }
-.character-portrait[data-career="space-scientist"] .character-sprite { background-position: 0% 100%; }
-.character-portrait[data-career="software-ai-developer"] .character-sprite { background-position: 50% 100%; }
-.character-portrait[data-career="scientific-digital-artist"] .character-sprite { background-position: 100% 100%; }
+.character-portrait[data-career="astronomer"] .character-sprite { background-image: url('/characters/astronomer.webp?v=5'); }
+.character-portrait[data-career="astronaut"] .character-sprite { background-image: url('/characters/astronaut.webp?v=5'); }
+.character-portrait[data-career="aerospace-engineer"] .character-sprite { background-image: url('/characters/aerospace-engineer.webp?v=5'); }
+.character-portrait[data-career="space-scientist"] .character-sprite { background-image: url('/characters/space-scientist.webp?v=5'); }
+.character-portrait[data-career="software-ai-developer"] .character-sprite { background-image: url('/characters/software-ai-developer.webp?v=5'); }
+.character-portrait[data-career="scientific-digital-artist"] .character-sprite { background-image: url('/characters/scientific-digital-artist.webp?v=5'); }
 
 .career-main-row .character-portrait.hero {
   display: grid;
